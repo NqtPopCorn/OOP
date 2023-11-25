@@ -22,6 +22,7 @@ public class ListPhieuNhap {
         }
     }
     public void xuat() {
+        if(n == 0) {System.out.println("Danh sach rong"); return;}
         for(int i = 0; i < n; i++) {
             System.out.println("Phieu nhap thu " + i +": ");
             list[i].xuat();
@@ -43,9 +44,9 @@ public class ListPhieuNhap {
         list = Arrays.copyOf(list, n + 1);
         list[n++] = newPN;
     }
-    public void xoa(int maPN) {
+    public void xoa(String maPN) {
         for(int i = 0; i < n; i++) {
-            if(list[i].getMaPN() == maPN) {
+            if(list[i].getMaPN().equals(maPN)) {
                 for(int j = i; j < n - 1; j++) {
                     list[i] = list[i+1];
                 }
@@ -54,10 +55,10 @@ public class ListPhieuNhap {
             }
         }
     }
-    public void sua(int maPN) {
+    public void sua(String maPN) {
         int foundIndex = -1;
         for(int i = 0; i < n; i++) {
-            if(list[i].getMaPN() == maPN) {
+            if(list[i].getMaPN().equals(maPN)) {
                 foundIndex = i;
                 break;
             }
@@ -74,17 +75,17 @@ public class ListPhieuNhap {
         switch(select) {
             case 1: {
                 System.out.println("Nhap ma nhieu nhap: ");
-                list[foundIndex].setMaPN(scanner.nextInt());
+                list[foundIndex].setMaPN(scanner.nextLine());
                 break;
             }
             case 2: {
                 System.out.println("Nhap ma nhan vien: ");
-                list[foundIndex].setMaNV(scanner.nextInt());
+                list[foundIndex].setMaNV(scanner.nextLine());
                 break;
             }
             case 3: {
                 System.out.println("Nhap ma nha cung cap: ");
-                list[foundIndex].setMaNCC(scanner.nextInt());
+                list[foundIndex].setMaNCC(scanner.nextLine());
                 break;
             }
             case 4: {
@@ -112,9 +113,9 @@ public class ListPhieuNhap {
             }
         }
     }
-    public PhieuNhap find(int maPN) {
+    public PhieuNhap find(String maPN) {
         for(int i = 0; i < n; i++) {
-            if(list[i].getMaPN() == maPN) {
+            if(list[i].getMaPN().equals(maPN)) {
                 return list[i];
             }
         }

@@ -1,28 +1,29 @@
 import java.util.Scanner;
-
+//1 maPN co the co nhieu chi tiet phieu nhap
 public class PhieuNhap {
-    private int maPN;
+    private String maPN;
     private String ngay;
-    private int maNV;
-    private int maNCC;
+    private String maNV;
+    private String maNCC;
     private double tongTien;
 
     PhieuNhap() {
-        maPN = 0;
+        maPN = "";
         ngay = "";
-        maNV = 0;
-        maNCC = 0;
+        maNV = "";
+        maNCC = "";
         tongTien = 0;
     }
-    PhieuNhap(int maPN, int d, int m, int y, int maNV, int maNCC, ListChiTietPN listCTPN) {
+    PhieuNhap(String maPN, int d, int m, int y, String maNV, String maNCC, ListChiTietPN listCTPN) {
         if(isValidDate(d, m, y)) ngay = String.format("%02d/%02d/%04d", d, m, y);
         else ngay = "";
         this.maPN = maPN;
         this.maNV = maNV;
         this.maNCC = maNCC;
-        tongTien = listCTPN.tinhTongTien(maPN);
+        ListChiTietPN found = listCTPN.selectAllByMaPN(maPN);
+        tongTien = found.tinhTongTien();
     }
-    PhieuNhap(int maPN, int d, int m, int y, int maNV, int maNCC) {
+    PhieuNhap(String maPN, int d, int m, int y, String maNV, String maNCC) {
         if(isValidDate(d, m, y)) ngay = String.format("%02d/%02d/%04d", d, m, y);
         else ngay = "";
         this.maPN = maPN;
@@ -36,7 +37,7 @@ public class PhieuNhap {
         System.out.println("\nNHAP PHIEU NHAP");
         Scanner scanner = new Scanner(System.in); 
         System.out.print("Nhap ma phieu nhap: ");
-        maPN = scanner.nextInt();
+        maPN = scanner.nextLine();
         int d, m, y;
         do {
             System.out.print("Nhap ngay, thang, nam: ");
@@ -48,9 +49,9 @@ public class PhieuNhap {
         while (!isValidDate(d, m, y));
         ngay = String.format("%02d/%02d/%04d", d, m, y);
         System.out.print("Nhap ma nhan vien: ");
-        maNV = scanner.nextInt();
+        maNV = scanner.nextLine();
         System.out.print("Nhap ma nha cung cap: ");
-        maNCC = scanner.nextInt();
+        maNCC = scanner.nextLine();
     }
     public void xuat() {
         System.out.println("\nXUAT PHIEU NHAP");
@@ -63,7 +64,10 @@ public class PhieuNhap {
     //-------------PHUONG THUC CO LIEN KET---------------
     public void xemChiTiet(ListChiTietPN l) {
         ListChiTietPN found = l.selectAllByMaPN(maPN);
-        if(found != null) found.printTable();
+        if(found != null) {
+            found.printTable();
+            System.out.format("Tong tien: %.3f", tongTien);
+        }
         else System.out.println("Khong tim thay chi tiet phieu nhap voi ma " + maPN);
     }
     public void xemNCC(ListNhaCungCap l) {
@@ -73,14 +77,14 @@ public class PhieuNhap {
     }
 
     //----------------GET, SET -------------
-    public int getMaPN() { return maPN; }
-    public void setMaPN(int maPN) { this.maPN = maPN;}
+    public String getMaPN() { return maPN; }
+    public void setMaPN(String maPN) { this.maPN = maPN;}
 
-    public int getMaNV() { return maNV; }
-    public void setMaNV(int maNV) { this.maNV = maNV; }
+    public String getMaNV() { return maNV; }
+    public void setMaNV(String maNV) { this.maNV = maNV; }
 
-    public int getMaNCC() { return maNCC; }
-    public void setMaNCC(int maNCC) { this.maNCC = maNCC; }
+    public String getMaNCC() { return maNCC; }
+    public void setMaNCC(String maNCC) { this.maNCC = maNCC; }
 
     public double getTongTien() { return tongTien; }
     public void setTongTien(double tongTien) { this.tongTien = tongTien; }
@@ -112,8 +116,4 @@ public class PhieuNhap {
         return false;
     }
 
-    //----------tinh toan-----------
-    public void tinhTongTien(ListChiTietPN l) {
-        tongTien = l.tinhTongTien(maPN);
-    }
 }
