@@ -71,7 +71,7 @@ public class PhieuNhap {
         else System.out.println("Khong tim thay chi tiet phieu nhap voi ma " + maPN);
     }
     public void xemNCC(ListNhaCungCap l) {
-        NhaCungCap found = l.find(maNCC);
+        NhaCungCap found = l.findByMaNCC(maNCC);
         if(found != null) found.xuat();
         else System.out.println("Khong tim thay nha cung cap voi ma " + maNCC);
     }

@@ -8,7 +8,7 @@ public class test {
         // l.printTable();
 
         ListNhaCungCap l = new ListNhaCungCap("NCC_PN_CTPN\\nhacungcap.txt");
-        l.printTable();
+        l.menu();
 
         // NhaCungCap[] l = new NhaCungCap[3];
         // l[1] = new NhaCungCap();
