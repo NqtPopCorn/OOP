@@ -1,16 +1,8 @@
-package OOP;
+package sanpham;
 
 import java.util.Scanner;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 
-/**
- *
- * @author Dell Vostro 3580
- */
 public class ChiTietDienThoai {
     public String maSP;
     public String maNhaSX;
@@ -25,7 +17,7 @@ public class ChiTietDienThoai {
     }
 
     public ChiTietDienThoai() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+     
     }
     
     public void setMaSP(String maSP) {
@@ -42,10 +34,7 @@ public class ChiTietDienThoai {
 
     public void setNgaySX(String ngaySX) {
         this.ngaySX = ngaySX;
-    }
-
-    
-    
+    }    
     public String getMaSP() {
         return maSP;
     }
@@ -70,10 +59,8 @@ public class ChiTietDienThoai {
         maNhaSX = scanner.nextLine();
         System.out.println("Nhap nha cung cap :");
         maNCC = scanner.nextLine();
-        scanner.nextLine();
         System.out.println("Nhap ngay san xuat:");
         ngaySX = scanner.nextLine();
-        scanner.nextLine();
     }
     public void xuat(){
         System.out.println("Ma san pham:"+maSP);
@@ -81,5 +68,4 @@ public class ChiTietDienThoai {
         System.out.println("Nha cung cap:"+maNCC);
         System.out.println("Ngay san xuat:"+ngaySX);
     }
-    
 }

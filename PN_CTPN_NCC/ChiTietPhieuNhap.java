@@ -1,26 +1,22 @@
-
+package PN_CTPN_NCC;
 import java.util.Scanner;
+import sanpham.*;
 
+//chi ghi vao file khi dung format va khong de trong
 public class ChiTietPhieuNhap {
-    private String maPN;
-    private String maSP;
+    private String maPN;//PN001
+    private String maSP;//SP001
     private int soLuong;
-    private double donGia;
+    private double donGia;//* */
     private double thanhTien;
+    
 
     public ChiTietPhieuNhap() {
-        maPN = "null";
-        maSP = "null";
+        maPN = "";
+        maSP = "";
         soLuong = 0;
         donGia = 0;
         thanhTien = 0;
-    }
-    public ChiTietPhieuNhap(String maSP, int soLuong, double donGia) {
-        this.maPN = "null";
-        this.maSP = maSP;
-        this.soLuong = soLuong;
-        this.donGia = donGia;
-        this.thanhTien = soLuong * donGia;
     }
     public ChiTietPhieuNhap(String maPN, String maSP, int soLuong, double donGia) {
         this.maPN = maPN;
@@ -44,26 +40,35 @@ public class ChiTietPhieuNhap {
     public void nhap() {
         Scanner scanner = new Scanner(System.in); 
         System.out.println("Nhap ma phieu nhap: ");
-        maPN = scanner.nextLine();
-        nhapSP();
-    }
-    public void nhapSP() {
-        Scanner scanner = new Scanner(System.in); 
+        maPN = scanner.next();
         System.out.println("Nhap ma san pham: ");
-        maSP = scanner.nextLine();
+        maSP = scanner.next();
         System.out.println("Nhap so luong: ");
         soLuong = scanner.nextInt();
+        //chua kiem tra don gia dung nhu trong ds san pham k
         System.out.println("Nhap don gia: ");
         donGia = scanner.nextDouble();
+        scanner.nextLine();
         thanhTien = donGia * soLuong;
     }
-    public void nhap(String data) {
-        Scanner scanner = new Scanner(data);
-        maPN = scanner.next();
+    public void nhapSP(double donGia) {
+        Scanner scanner = new Scanner(System.in); 
+        System.out.println("Nhap ma san pham: ");
         maSP = scanner.next();
+        System.out.println("Nhap so luong: ");
         soLuong = scanner.nextInt();
-        donGia = scanner.nextDouble();
-        thanhTien = scanner.nextDouble();
+        this.donGia = donGia;
+        scanner.nextLine();
+        thanhTien = donGia * soLuong;
+    }
+    public void khoiTaoTuString(String data) {
+        Scanner scanner = new Scanner(data);
+        scanner.useDelimiter(";\s{0,}|\n");
+        maPN = scanner.next().trim();
+        maSP = scanner.next().trim();
+        soLuong = Integer.parseInt(scanner.next().trim());
+        donGia = Double.parseDouble(scanner.next().trim());
+        thanhTien = Double.parseDouble(scanner.next().trim());
         scanner.close();
     }
 
@@ -82,13 +87,13 @@ public class ChiTietPhieuNhap {
     }
 
     public void xemPhieuNhap(ListPhieuNhap l) {
-        PhieuNhap found = l.find(maPN);
+        PhieuNhap found = l.findByMaPN(maPN);
         if(found != null) found.xuat();
         else System.out.println("Khong tim thay phieu nhap voi ma " + maPN);
     }
 
     public String toString() {
-        return String.format("%s, %s, %s, %s", 
+        return String.format("%s; %s; %d; %.3f; %.3f",
             maPN, maSP, soLuong, donGia, thanhTien
         );
     }

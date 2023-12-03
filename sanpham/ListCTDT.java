@@ -1,4 +1,4 @@
-package OOP;
+package sanpham;
 
 import java.util.Arrays;
 import java.util.Scanner;
@@ -8,8 +8,7 @@ public class ListCTDT {
     private int n;
 
     public ListCTDT() {
-        list = null;
-        n = 0;
+        
     }
     public ListCTDT(int n) {
         list = new ChiTietDienThoai[n];
@@ -55,6 +54,7 @@ public class ListCTDT {
                 break;
             }
         }
+        n--;
     }
     public void sua(String maSP) {
         int foundIndex = -1;

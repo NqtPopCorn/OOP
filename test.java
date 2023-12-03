@@ -1,39 +1,28 @@
-package OOP;
 
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import PN_CTPN_NCC.*;
+import sanpham.DSDT;
+import sanpham.ListCTDT;
+import sanpham.MenuDT;
+
 public class test {
-    // public static void main(String[] args) {
-    //     ListChiTietPN dsChiTietPN;
-    //     ListNhaCungCap dsNCC;
-    //     ListPhieuNhap dsPN;
+    public static void main(String[] args) {
+        // ListChiTietPN l = new ListChiTietPN("NCC_PN_CTPN\\chitietPN.txt");
 
-    //     Scanner scanner = new Scanner(System.in);
-    //     int n;
-    //     System.out.println("Nhap so chi tiet phieu nhap:");
-    //     n = scanner.nextInt();
-    //     dsChiTietPN = new ListChiTietPN(n);
-    //     System.out.println("Nhap danh sach chi tiet phieu nhap");
-    //     dsChiTietPN.nhap();
+        // l.printTable();
 
-    //     System.out.println("Nhap so phieu nhap: ");
-    //     n = scanner.nextInt();
-    //     dsPN = new ListPhieuNhap(n);
-    //     System.out.println("Nhap danh sach phieu nhap");
-    //     dsPN.nhap();
+        ListNhaCungCap lNCC = new ListNhaCungCap("data\\nhacungcap.txt");
+        ListChiTietPN lCTPN = new ListChiTietPN("data\\chitietPN.txt");
+        ListPhieuNhap lPN = new ListPhieuNhap("data\\phieunhap.txt");
+        DSDT lDT = new DSDT();
+        lDT.docfile();
 
-    //     System.out.println("Nhap so nha cung cap: ");
-    //     n = scanner.nextInt();
-    //     dsNCC= new ListNhaCungCap(n);
-    //     System.out.println("Nhap danh sach nha cung cap");
-    //     dsNCC.nhap(); 
 
-    //     System.out.println("Danh sach chi tiet phieu nhap");
-    //     dsChiTietPN.xuat();
-    //     System.out.println("Danh sach phieu nhap");
-    //     dsPN.xuat();
-    //     System.out.println("Danh sach nha cung cap");
-    //     dsNCC.xuat();
-    // }
-    
-
+        // lPN.menu(lNCC, lCTPN);
+        // lNCC.menu();
+        lCTPN.menu(lPN, lDT);
+    }
 }

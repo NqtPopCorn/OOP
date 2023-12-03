@@ -1,9 +1,11 @@
+package PN_CTPN_NCC;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 //xoa mot nha cung cap xong thi ma da xoa con dung lai duoc khong?, giai phap la gan bien static cho NhaCungCap
 //cach doc data phan cach boi dau phay bang scanner? tl: dung scanner.useDelimiter(String pattern)
@@ -11,20 +13,20 @@ public class ListNhaCungCap {
     private NhaCungCap[] list;
     private int n;
     private File fileData;
-    final private String maNCC_pattern = "NCC\\d{3,}";
+    final private static String maNCC_pattern = "NCC\\d{3,}";
 
-    ListNhaCungCap() {
+    public ListNhaCungCap() {
         list = new NhaCungCap[0];
         n = 0;
         fileData = null;
     }
-    ListNhaCungCap(int n) {
+    public ListNhaCungCap(int n) {
         list = new NhaCungCap[n];
         this.n = n;
         for(int i = 0; i < n; i++) list[i] = new NhaCungCap();
         fileData = null;
     }
-    ListNhaCungCap(String fileData_path) {
+    public ListNhaCungCap(String fileData_path) {
         list = new NhaCungCap[0];
         n = 0;
         fileData = new File(fileData_path);
@@ -34,14 +36,17 @@ public class ListNhaCungCap {
     //---------------------NHAP XUAT----------------------
     public void nhap() {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Nhap so phan tu: ");
-        n = scanner.nextInt();
-        scanner.nextLine();
+        do {
+            System.out.print("Nhap so phan tu: ");
+            n = scanner.nextInt();
+            scanner.nextLine();
+            if(n < 0) System.out.println("Vui long nhap so khong am!!!");
+        } while(n < 0);
         list = new NhaCungCap[n];
         for(int i = 0; i < n; i++) list[i] = new NhaCungCap();
 
         for(int i = 0; i < n; i++) {
-            System.out.println("Nhap NCC thu " + (i+1) +": ");
+            System.out.print("Nhap NCC thu " + (i+1) +": ");
             String ma = "";
             do {
                 System.out.print("Nhap ma NCC: ");
@@ -112,6 +117,9 @@ public class ListNhaCungCap {
     public File getFileData() {
         return fileData;
     }
+    public String getPatternMaNCC() {
+        return maNCC_pattern;
+    }
 
     //----------------------THEM----------------------
     public void them() {
@@ -119,7 +127,7 @@ public class ListNhaCungCap {
         NhaCungCap newNCC = null;
         String ma = "";
         do {
-            System.out.println("Nhap ma NCC: ");
+            System.out.print("Nhap ma NCC: ");
             ma = scanner.nextLine();
             if(!isValidMaNCC(ma)) {
                 System.out.println("Ma sai dinh dang hoac da ton tai!!");
@@ -150,24 +158,16 @@ public class ListNhaCungCap {
                 list = Arrays.copyOf(list, n - 1);
                 n--;
                 System.out.println("Xoa thanh cong");
-                break;
+                return;
             }
         }
+        System.out.println("Xoa that bai");
     }
     public void xoa() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Nhap ma NCC can xoa: ");
         String ma = scanner.nextLine();
-        for(int i = 0; i < n; i++) {
-            if(list[i].getMaNCC().equals(ma)) {
-                for(int j = i; j < n - 1; j++) {
-                    list[j] = list[j+1];
-                }
-                list = Arrays.copyOf(list, n - 1);
-                n--;
-                break;
-            }
-        }
+        xoa(ma);
     }
     //-------------------SUA-------------------
     //chua sua maNCC
@@ -235,7 +235,7 @@ public class ListNhaCungCap {
         String ma = scanner.nextLine();
         sua(ma);
     }
-    //--------------------TIM KIEM---------------------
+    //--------------------TIM KIEM, FILTER---------------------
     //da ma la duy nhat nen tra ve mot object duy nhat
     public NhaCungCap findByMaNCC(String maPN) {
         for(int i = 0; i < n; i++) {
@@ -249,35 +249,25 @@ public class ListNhaCungCap {
         String ma = scanner.nextLine().trim();
         return findByMaNCC(ma);
     }
-    public ListNhaCungCap findByDiaChi(String diaChi) {
-        if(diaChi.isEmpty()) return this;
-        diaChi = diaChi.trim();
+    public ListNhaCungCap locTheoMaNCC(String maNCC) {
+        if(maNCC.isEmpty()) return this;
+        maNCC = maNCC.trim();
+        Pattern pattern = Pattern.compile(maNCC, Pattern.CASE_INSENSITIVE);
         ListNhaCungCap result = new ListNhaCungCap();
         for(int i = 0; i < n; i++) {
-            if(list[i].getDiaChi().equals(diaChi)) {
+            if(pattern.matcher(list[i].getMaNCC()).find()) {
                 result.them(list[i]);
             }
         }
         return result;
     }
-    public ListNhaCungCap findBySDT(String sdt) {
-        if(sdt.isEmpty()) return this;
-        sdt = sdt.trim();
-        ListNhaCungCap result = new ListNhaCungCap();
-        for(int i = 0; i < n; i++) {
-            if(list[i].getSoDT().equals(sdt)) {
-                result.them(list[i]);
-            }
-        }
-        return result;
-    }
-    //---------------------FILTER------------------------
     public ListNhaCungCap locTheoTen(String tenNCC) {
         if(tenNCC.isEmpty()) return this;
         tenNCC = tenNCC.trim();
+        Pattern pattern = Pattern.compile(tenNCC, Pattern.CASE_INSENSITIVE);
         ListNhaCungCap result = new ListNhaCungCap();
         for(int i = 0; i < n; i++) {
-            if(list[i].getTenNCC().indexOf(tenNCC) >= 0) {
+            if(pattern.matcher(list[i].getTenNCC()).find()) {
                 result.them(list[i]);
             }
         }
@@ -286,9 +276,10 @@ public class ListNhaCungCap {
     public ListNhaCungCap locTheoDiaChi(String diaChi) {
         if(diaChi.isEmpty()) return this;
         diaChi = diaChi.trim();
+        Pattern pattern = Pattern.compile(diaChi, Pattern.CASE_INSENSITIVE);
         ListNhaCungCap result = new ListNhaCungCap();
         for(int i = 0; i < n; i++) {
-            if(list[i].getDiaChi().indexOf(diaChi) >= 0) {
+            if(pattern.matcher(list[i].getDiaChi()).find()) {
                 result.them(list[i]);
             }
         }
@@ -297,63 +288,46 @@ public class ListNhaCungCap {
     public ListNhaCungCap locTheoSDT(String sdt) {
         if(sdt.isEmpty()) return this;
         sdt = sdt.trim();
+        Pattern pattern = Pattern.compile(sdt, Pattern.CASE_INSENSITIVE);
         ListNhaCungCap result = new ListNhaCungCap();
         for(int i = 0; i < n; i++) {
-            if(list[i].getSoDT().indexOf(sdt) >= 0) {
+            if(pattern.matcher(list[i].getSoDT()).find()) {
                 result.them(list[i]);
             }
         }
         return result;
     }
-    public void filterMenu() {
-        int select;
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("\t\tFILTER");
-        System.out.println("1. Loc theo ten");
-        System.out.println("2. Loc theo dia chi");
-        System.out.println("3. Loc theo so dien thoai");
-        System.out.print("Lua chon cua ban: ");
-        select = scanner.nextInt();
-        scanner.nextLine();
-        switch(select) {
-            case 1: {
-                System.out.print("Nhap ten can loc: ");
-                String ten = scanner.nextLine();
-                System.out.println("\nDanh sach da loc: ");
-                locTheoTen(ten).printTable();
-                break;
-            }
-            case 2: {
-                System.out.println("Nhap dia chi can loc: ");
-                String diaChi = scanner.nextLine();
-                System.out.println("Danh sach da loc: ");
-                locTheoDiaChi(diaChi).printTable();
-                break;
-            }
-            case 3: {
-                System.out.println("Nhap so dien thoai can loc: ");
-                String sdt = scanner.nextLine();
-                System.out.println("Danh sach da loc: ");
-                locTheoSDT(sdt).printTable();
-                break;
-            }
-            default: {
-                System.out.println("Lua chon khong dung, thoat");
-                break;
-            }
-        }
-    }
     //-----------THONG KE-------------
-    //theo dia chi 
-    //filter menu
+    public void thongKeTheoTen() {
+        Scanner scanner = new Scanner(System.in);
+        int count = 0;
+        System.out.print("Nhap ten chinh xac: ");
+        String ten = scanner.nextLine().trim();
+        for(int i = 0; i < n; i++) {
+            if(list[i].getTenNCC().equals(ten)) count++;
+        }
+        System.out.format("Co %d NCC co ten %s\n", count, ten);
+    }
     public void thongKeTheoDiaChi() {
         Scanner scanner = new Scanner(System.in);
+        int count = 0;
         System.out.print("Nhap dia chi chinh xac: ");
         String diaChi = scanner.nextLine().trim();
-
-        System.out.format("Co %d NCC co dia chi %s\n", findByDiaChi(diaChi).size(), diaChi);
+        for(int i = 0; i < n; i++) {
+            if(list[i].getDiaChi().equals(diaChi)) count++;
+        }
+        System.out.format("Co %d NCC co dia chi %s\n", count, diaChi);
     }
-
+    public void thongKeTheoSDT() {
+        Scanner scanner = new Scanner(System.in);
+        int count = 0;
+        System.out.print("Nhap SDT chinh xac: ");
+        String soDT = scanner.nextLine().trim();
+        for(int i = 0; i < n; i++) {
+            if(list[i].getSoDT().equals(soDT)) count++;
+        }
+        System.out.format("Co %d NCC co ten %s\n", count, soDT);
+    }
     //------------------GHI FILE-------------------
     public void capNhatFileData() {
         if(fileData == null) {
@@ -407,23 +381,37 @@ public class ListNhaCungCap {
         }
     }
     //-----------------KIEM TRA---------------
-    public Boolean isValidMaNCC(String ma) {
-        return isMatchedIdPattern(ma) && findByMaNCC(ma) == null;
+    public boolean isValidMaNCC(String ma) {
+        return isMatchedFormatMaNCC(ma) && findByMaNCC(ma) == null;
     }
-    public Boolean isMatchedIdPattern(String ma) {
+    public static boolean isMatchedFormatMaNCC(String ma) {
         return ma.matches(maNCC_pattern);
     }
     //--------------sort theo ma neu can----------------
-
-
-
-    // //------------in menu--------
+    public void sortAscMaNCC() {
+        for(int i = 0; i < n-1; i++) {
+            Scanner intScan = new Scanner(list[i].getMaNCC());
+            int vi = Integer.parseInt(intScan.findInLine("\\d{1,}"));
+            intScan.close();
+            for(int j = i+1; j <n; j++) {
+                intScan = new Scanner(list[j].getMaNCC());
+                int vj = Integer.parseInt(intScan.findInLine("\\d{1,}"));
+                intScan.close();
+                if(vi > vj) {
+                    NhaCungCap temp = list[i];
+                    list[i] = list[j];
+                    list[j] = temp;
+                }
+            }
+        }
+    }
+    //---------------MENU--------------
     public void menu() {
         Scanner scanner = new Scanner(System.in);
         int option;
         do {
             System.out.println("\nMENU List Nha Cung Cap");
-            System.out.println("\t0. thoat");
+            System.out.println("\t0. THOAT");
             System.out.println("\t1. Nhap lai danh sach nay");
             System.out.println("\t2. Xuat bang danh sach");
             System.out.println("\t3. Them mot nha cung cap");
@@ -431,64 +419,132 @@ public class ListNhaCungCap {
             System.out.println("\t5. Sua thong tin nha cung cap");
             System.out.println("\t6. Tim kiem nha cung cap theo ma");
             System.out.println("\t7. Loc NCC thoa yeu cau");
-            System.out.println("\t8. Cap nhat danh sach hien tai vao file data hien co");
+            System.out.println("\t8. LUU vao file data hien co");
             System.out.println("\t9. Khoi tao lai tu file data hien co");
-            System.out.println("\t10. Thong ke Nha cung cap theo dia chi");//cung ten, cung dia chi, sdt
+            System.out.println("\t10. Thong ke Nha cung cap");//cung ten, cung dia chi, sdt
             System.out.println("\t11. Xoa danh sach hien tai");
+            System.out.println("\t12. Sap xep danh sach hien tai tang dan theo maNCC");
             System.out.println("So NCC danh sach hien tai la: " + n + "\n");
             System.out.print("Lua chon cua ban: ");
             option = scanner.nextInt();
             scanner.nextLine();
             switch(option) {
-                case 1: {
+                case 1: { 
                     nhap();
                     break;
                 } 
-                case 2: {
+                case 2: { 
                     printTable();
                     break;
                 } 
-                case 3: {
+                case 3: { 
                     them();
                     break;
                 } 
-                case 4: {
+                case 4: { 
                     xoa();
                     break;
                 } 
-                case 5: {
+                case 5: { 
                     sua();
                     break;
                 } 
-                case 6: {
+                case 6: { 
                     NhaCungCap found = findByMaNCC();
                     System.out.println("\n----Ket qua tim kiem----");
                     if(found != null) found.xuat();
                     else System.out.println("khong tim thay!!!");
                     break;
                 }
-                case 7: {
-                    filterMenu();
+                case 7: { 
+                    menuFilter();
                     break;
                 }
-                case 8: {
+                case 8: { 
                     capNhatFileData();
                     break;
                 } 
-                case 9: {
+                case 9: { 
                     khoiTaoTuFileData();
                     break;
                 }
-                case 10: {
-                    thongKeTheoDiaChi();
+                case 10: { 
+                    menuThongKe();
                     break;
                 }
-                case 11: {
+                case 11: { 
                     reSize(0);
+                    break;
+                }
+                case 12: { 
+                    sortAscMaNCC();
                     break;
                 }
                 default: break;
             }
-        } while (option > 0 && option <= 11);
+        } while (option > 0 && option <= 12);
+    }
+    public void menuThongKe() {
+        Scanner scanner = new Scanner(System.in);
+        int select;
+        System.out.println("------Thong ke-----");
+        System.out.println("1. Thong ke theo ten");
+        System.out.println("2. Thong ke theo dia chi");
+        System.out.println("3. Thong ke theo sdt");
+        select = scanner.nextInt();
+        scanner.nextLine();
+        switch(select) {
+            case 1: {
+                thongKeTheoTen();
+                break;
+            }
+            case 2: {
+                thongKeTheoDiaChi();
+                break;
+            }
+            case 3: {
+                thongKeTheoSDT();
+                break;
+            }
+            default: break;
+        }
+    }
+    public void menuFilter() {
+        int select;
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("\t\tFILTER");
+        System.out.println("1. Loc theo ten");
+        System.out.println("2. Loc theo dia chi");
+        System.out.println("3. Loc theo so dien thoai");
+        System.out.print("Lua chon cua ban: ");
+        select = scanner.nextInt();
+        scanner.nextLine();
+        switch(select) {
+            case 1: {
+                System.out.print("Nhap ten can loc: ");
+                String ten = scanner.nextLine();
+                System.out.println("\nDanh sach da loc: ");
+                locTheoTen(ten).printTable();
+                break;
+            }
+            case 2: {
+                System.out.print("Nhap dia chi can loc: ");
+                String diaChi = scanner.nextLine();
+                System.out.println("Danh sach da loc: ");
+                locTheoDiaChi(diaChi).printTable();
+                break;
+            }
+            case 3: {
+                System.out.print("Nhap so dien thoai can loc: ");
+                String sdt = scanner.nextLine();
+                System.out.println("Danh sach da loc: ");
+                locTheoSDT(sdt).printTable();
+                break;
+            }
+            default: {
+                System.out.println("Lua chon khong dung, thoat");
+                break;
+            }
+        }
     }
 }

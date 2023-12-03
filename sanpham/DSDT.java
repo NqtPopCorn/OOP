@@ -1,20 +1,32 @@
-package OOP;
-
+package sanpham;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Scanner;
 
+import javax.sound.midi.Patch;
+
 public class DSDT {
-    private DienThoai []dsdt;
-    private int n;
+    public DienThoai []dsdt;
+    public int n=100;
 
-    DSDT(){
-
+    public DSDT(){
+        
     }
-    DSDT(DienThoai dsdt[],int tongDT){
+    public DSDT(DienThoai dsdt[],int tongDT){
         this.n=tongDT;
         this.dsdt=dsdt;
     }
-    DSDT(DSDT s){
+    public DSDT(DSDT s){
         dsdt=s.dsdt;
         n=s.n;
     }
@@ -45,8 +57,18 @@ public class DSDT {
         System.out.println();
         for(int i=0;i<n;i++){
             dsdt[i].xuat();
+            System.out.println();
         }
-        System.out.println();
+        
+    }
+    //============Kiem tra MaDT=============
+    public boolean checkMaDT(String MaDT){
+        for(int i=0;i<n;i++){
+            if(dsdt[i].getMaSP().indexOf(MaDT)!=-1){
+                return true;
+            }
+        }
+        return false;
     }
     //=========Them==============
     public void themDT(){
@@ -59,13 +81,148 @@ public class DSDT {
             case 1:
                 dsdt[n]=new Androi();
                 dsdt[n].nhap();
+                ghinoiAnd((Androi)dsdt[n]);
                 n++;
+                
                 break;
             case 2:
                 dsdt[n]=new IOS();
                 dsdt[n].nhap();
+                ghinoiIOS((IOS)dsdt[n]);
                 n++;
                 break;
+        }
+    }
+    //Tim hieu them
+    // public void themDT(DienThoai dt){
+    //     Scanner scanner=new Scanner(System.in);
+    //     dsdt=Arrays.copyOf(dsdt,dsdt.length+1);
+    //     System.out.println("1-Androi\n"+"2-IOS");
+    //     int h=scanner.nextInt();
+    //     scanner.nextLine();
+    //     switch(h){
+    //         case 1:
+    //             dsdt[n]=new Androi();
+    //             dsdt[n].nhap(dt);
+    //             n++;
+    //             ghinoiAnd(dsdt[n]);
+    //             break;
+    //         case 2:
+    //             dsdt[n]=new IOS();
+    //             dsdt[n].nhap(dt);
+    //             n++;
+    //             ghinoiIOS((IOS)dsdt[n]);
+    //             break;
+    //     }
+    // }
+    //=========Doc file text=========
+    /**
+     */
+    public void docfile(){
+        BufferedReader reader;
+        dsdt=new DienThoai[n];
+		try {
+			reader = new BufferedReader(new FileReader("data\\dsdt.txt"));
+			String line = reader.readLine();
+            int i=0;
+			while (line != null&& !line.trim().isEmpty()) {
+				String[] result=line.split("#");
+                System.out.println(result.length);
+                if(result[0].indexOf("Androi")!=-1){
+                    dsdt[i]=new Androi();
+                    dsdt[i].setMaSP(result[1]);
+                    dsdt[i].setTenSP(result[2]);
+                    dsdt[i].setSoLuong(Integer.parseInt(result[3]));
+                    dsdt[i].setDonGia(Float.parseFloat(result[4]));
+                    dsdt[i].setDonViTinh(result[5]);
+                    ((Androi) dsdt[i]).setCrack(result[6]);
+                }
+                else{
+                    dsdt[i]=new IOS();
+                    dsdt[i].setMaSP(result[1]);
+                    dsdt[i].setTenSP(result[2]);
+                    dsdt[i].setSoLuong(Integer.parseInt(result[3]));
+                    dsdt[i].setDonGia(Float.parseFloat(result[4]));
+                    dsdt[i].setDonViTinh(result[5]);
+                    ((IOS) dsdt[i]).setTimIphone(result[6]);
+                    ((IOS) dsdt[i]).setHeSinhThaiDL(result[7]);
+                }
+				line = reader.readLine();
+                i++;
+			}
+            System.out.println("Da doc xong.");
+            System.out.println();
+            n=i;
+            // System.out.println(n);
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
+    //======Ghi File============
+    public void ghifile(){
+        try {
+            PrintWriter pw=new PrintWriter("data\\dsdt.txt");
+            for(int i=0;i<n;i++){
+                if(dsdt[i] instanceof Androi){
+                    pw.write("Androi#");
+                    pw.write(dsdt[i].getMaSP()+"#");
+                    pw.write(dsdt[i].getTenSP()+"#");
+                    pw.write(dsdt[i].getSoLuong()+"#");
+                    pw.write(dsdt[i].getDonGia()+"#");
+                    pw.write(dsdt[i].getDonViTinh()+"#");
+                    pw.write(((Androi) dsdt[i]).getCrack()+"\n");
+                }
+                else if(dsdt[i] instanceof IOS){
+                    pw.write("IOS#");
+                    pw.write(dsdt[i].getMaSP()+"#");
+                    pw.write(dsdt[i].getTenSP()+"#");
+                    pw.write(dsdt[i].getSoLuong()+"#");
+                    pw.write(dsdt[i].getDonGia()+"#");
+                    pw.write(dsdt[i].getDonViTinh()+"#");
+                    pw.write(((IOS) dsdt[i]).getTimIphone()+"#");
+                    pw.write(((IOS) dsdt[i]).getHeSinhThaiDL()+"\n");
+                }
+            }
+            pw.flush();
+            pw.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+            System.out.println("Da ghi xong.");
+            System.out.println();
+    }
+//==========Ghi noi file============
+    public static void ghinoiAnd(Androi ad){
+        if(ad!=null){
+            try {
+                FileWriter  fw=new FileWriter ("data\\dsdt.txt",true);
+                fw.append("Androi#"+ad.getMaSP()+"#"+ad.getTenSP()+"#"+ad.getSoLuong()+"#"+ad.getDonGia()+"#"+ad.getDonViTinh()+"#"+ad.getCrack()+"\n");
+                fw.close();
+                System.out.println("Da cap nhat.\n");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else{
+            System.out.println("Invalid Androi object");
+        }
+    }
+
+    public static void ghinoiIOS(IOS ios){
+        if(ios!=null){
+            try {
+                FileWriter  pw=new FileWriter ("data\\dsdt.txt",true);
+                pw.append("IOS#"+ios.getMaSP()+"#"+ios.getTenSP()+"#"+ios.getSoLuong()+"#"+ios.getDonGia()+"#"+ios.getDonViTinh()+"#"+ios.getTimIphone()+"#"+ios.getHeSinhThaiDL()+"\n");
+                pw.close();
+                System.out.println("Da cap nhat.\n");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+        }
+        else{
+            System.out.println("Invalid IOS object");
         }
     }
     //======Tim kiem============
@@ -77,6 +234,15 @@ public class DSDT {
         }
         return -1;
     }
+     public DienThoai timkiemDT(String MaSP){
+        for(int i=0;i<n;i++){
+            if(dsdt[i].getMaSP().indexOf(MaSP)!=-1){
+                return dsdt[i];
+            }
+        }
+        return null;
+    }
+
     public void timkiemTenSP(){
         System.out.println("Nhap ten San pham muon tim kiem:");
         Scanner scanner=new Scanner(System.in);
@@ -146,10 +312,16 @@ public class DSDT {
         }
         else{
             for(int i = t; i < n - 1; i++){
-                dsdt[i]=new DienThoai(dsdt[i+1]);
+                if(dsdt[i+1] instanceof Androi){
+                    dsdt[i]=new Androi((Androi) dsdt[i+1]);
+                }
+                else{
+                    dsdt[i]=new IOS((IOS) dsdt[i+1]);
+                }
             }
             dsdt=Arrays.copyOf(dsdt,dsdt.length-1);
             n--;
+            ghifile();
         }
     }
 
@@ -168,30 +340,38 @@ public class DSDT {
         switch(k){
             case 1:
                 System.out.println("Nhap thong tin can sua:");
-                String c1=scanner.nextLine();
-                dsdt[p].setMaSP(c1);
+                String c1;
+                do{
+                    c1=scanner.nextLine();
+                    dsdt[p].setMaSP(c1);
+                }while (checkMaDT(c1)==true); 
+                ghifile();
                 break;
             case 2:
                 System.out.println("Nhap thong tin can sua:");
                 String c2=scanner.nextLine();
                 dsdt[p].setTenSP(c2);
+                ghifile();
                 break;
             case 3:
                 System.out.println("Nhap thong tin can sua:");
                 int c3=scanner.nextInt();
                 scanner.nextLine();
                 dsdt[p].setSoLuong(c3);
+                ghifile();
                 break;
             case 4:
                 System.out.println("Nhap thong tin can sua:");
                 float c4=scanner.nextFloat();
                 scanner.nextLine();
-                dsdt[p].setDonGia(c4);;
+                dsdt[p].setDonGia(c4);
+                ghifile();
                 break;
             case 5:
                 System.out.println("Nhap thong tin can sua:");
                 String c5=scanner.nextLine();
                 dsdt[p].setDonViTinh(c5);
+                ghifile();
                 break;
             case 6:
                 if(dsdt[p] instanceof IOS){
@@ -200,6 +380,7 @@ public class DSDT {
                     IOS m=new IOS();
                     m=(IOS)dsdt[p];
                     m.setHeSinhThaiDL(c6);
+                    ghifile();
                 }
                 else{
                     System.out.println("Dien thoai thuoc dong \"Androi\" nen khong co chuc nang nay.");
@@ -212,6 +393,7 @@ public class DSDT {
                     IOS t=new IOS();
                     t=(IOS)dsdt[p];
                     t.setTimIphone(c7);
+                    ghifile();
                 }
                 else{
                     System.out.println("Dien thoai thuoc dong \"Androi\" nen khong co chuc nang nay.");
@@ -224,6 +406,7 @@ public class DSDT {
                     Androi b=new Androi();
                     b=(Androi)dsdt[p];
                     b.setCrack(c8);
+                    ghifile();
                 }
                 else{
                     System.out.println("Dien thoai thuoc dong \"IOS\" nen khong co chuc nang nay.");

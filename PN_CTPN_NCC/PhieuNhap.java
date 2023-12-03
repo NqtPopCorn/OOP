@@ -1,4 +1,7 @@
+package PN_CTPN_NCC;
+
 import java.util.Scanner;
+
 //1 maPN co the co nhieu chi tiet phieu nhap
 public class PhieuNhap {
     private String maPN;
@@ -7,24 +10,24 @@ public class PhieuNhap {
     private String maNCC;
     private double tongTien;
 
-    PhieuNhap() {
+    public PhieuNhap() {
         maPN = "";
         ngay = "";
         maNV = "";
         maNCC = "";
         tongTien = 0;
     }
-    PhieuNhap(String maPN, int d, int m, int y, String maNV, String maNCC, ListChiTietPN listCTPN) {
-        if(isValidDate(d, m, y)) ngay = String.format("%02d/%02d/%04d", d, m, y);
+    public PhieuNhap(String maPN, int d, int m, int y, String maNV, String maNCC, ListChiTietPN listCTPN) {
+        if(isValidDate(d, m, y)) ngay = String.format("%04d-%02d-%02d", y, m, d);
         else ngay = "";
         this.maPN = maPN;
         this.maNV = maNV;
         this.maNCC = maNCC;
-        ListChiTietPN found = listCTPN.selectAllByMaPN(maPN);
+        ListChiTietPN found = listCTPN.locTheoMaPN(maPN);
         tongTien = found.tinhTongTien();
     }
-    PhieuNhap(String maPN, int d, int m, int y, String maNV, String maNCC) {
-        if(isValidDate(d, m, y)) ngay = String.format("%02d/%02d/%04d", d, m, y);
+    public PhieuNhap(String maPN, int d, int m, int y, String maNV, String maNCC) {
+        if(isValidDate(d, m, y)) ngay = String.format("%04d-%02d-%02d", y, m, d);
         else ngay = "";
         this.maPN = maPN;
         this.maNV = maNV;
@@ -38,6 +41,14 @@ public class PhieuNhap {
         Scanner scanner = new Scanner(System.in); 
         System.out.print("Nhap ma phieu nhap: ");
         maPN = scanner.nextLine();
+        nhapNgay();
+        System.out.print("Nhap ma nhan vien: ");
+        maNV = scanner.nextLine();
+        System.out.print("Nhap ma nha cung cap: ");
+        maNCC = scanner.nextLine();
+    }
+    public void nhapNgay() {
+        Scanner scanner = new Scanner(System.in);
         int d, m, y;
         do {
             System.out.print("Nhap ngay, thang, nam: ");
@@ -47,11 +58,21 @@ public class PhieuNhap {
             if(!isValidDate(d, m, y)) System.out.println("Loi nhap ngay!!! Hay nhap lai: ");
         }
         while (!isValidDate(d, m, y));
-        ngay = String.format("%02d/%02d/%04d", d, m, y);
-        System.out.print("Nhap ma nhan vien: ");
-        maNV = scanner.nextLine();
-        System.out.print("Nhap ma nha cung cap: ");
-        maNCC = scanner.nextLine();
+        ngay = String.format("%04d-%02d-%02d", y, m, d);
+    }
+    public void nhap(String maPN) {
+        this.maPN = maPN;
+        Scanner scanner = new Scanner(System.in);
+        do {
+            nhapNgay();
+            System.out.print("Nhap ma nhan vien: ");
+            maNV = scanner.nextLine();
+            System.out.print("Nhap ma nha cung cap: ");
+            maNCC = scanner.nextLine();
+            System.out.print("Nhap tong tien: ");
+            tongTien = scanner.nextDouble();
+            if(!isValid()) System.out.println("Cac truong khong duoc rong va so khong duoc am, nhap lai");
+        } while(!isValid());
     }
     public void xuat() {
         System.out.println("\nXUAT PHIEU NHAP");
@@ -62,8 +83,8 @@ public class PhieuNhap {
     }
 
     //-------------PHUONG THUC CO LIEN KET---------------
-    public void xemChiTiet(ListChiTietPN l) {
-        ListChiTietPN found = l.selectAllByMaPN(maPN);
+    public void xemChiTietPN(ListChiTietPN l) {
+        ListChiTietPN found = l.locTheoMaPN(maPN);
         if(found != null) {
             found.printTable();
             System.out.format("Tong tien: %.3f", tongTien);
@@ -91,7 +112,7 @@ public class PhieuNhap {
     
     public String getNgay() { return ngay; }
     public void setNgay(int d, int m, int y) {
-        if(isValidDate(d, m, y)) ngay = String.format("%02d/%02d/%04d", d, m, y);
+        if(isValidDate(d, m, y)) ngay = String.format("%04d-%02d-%02d", y, m, d);
         else System.out.println("Invalid params in setNgay()");
     }
 
@@ -115,5 +136,31 @@ public class PhieuNhap {
         if(year%4 == 0 && year%100 != 0 || year%400 == 0) return true;
         return false;
     }
+    public static String createDate(int d, int m, int y) {
+        return String.format("%04d-%02d-%02d", y, m, d);
+    }
 
+    public void khoiTaoTuString(String data) {
+        Scanner scanner = new Scanner(data);
+        scanner.useDelimiter(";\s{0,}|\n");
+        maPN = scanner.next().trim();
+        ngay = scanner.next().trim();
+        maNV = scanner.next().trim();
+        maNCC = scanner.next().trim();
+        tongTien = Double.parseDouble(scanner.next());
+        scanner.close();
+    }
+    public String toString() {
+        return String.format("%s; %s; %s; %s; %.3f", maPN, ngay, maNV, maNCC, tongTien);
+    }
+    public boolean isValid() {
+        return !maPN.isEmpty() && !ngay.isEmpty() && !maNV.isEmpty()
+        && !maNCC.isEmpty() && tongTien >= 0;
+    }
+    public String toStringFormat(String formatter) {
+        return String.format(formatter, maPN, ngay, maNV, maNCC, String.format("%.3f", tongTien));
+    }
+
+    //----------------MENU-----------
+    
 }

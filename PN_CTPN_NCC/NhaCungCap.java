@@ -1,3 +1,4 @@
+package PN_CTPN_NCC;
 
 import java.util.Scanner;
 public class NhaCungCap {
@@ -5,22 +6,20 @@ public class NhaCungCap {
     private String tenNCC;
     private String diaChi;
     private String soDT;
-    //ho tro khoi tao maNCC khong trung
-    //gia tri cua id la max cua tat ca ca NCC da khoi tao
 
-    NhaCungCap() {
+    public NhaCungCap() {
         maNCC = "";
         tenNCC = "";
         diaChi = "";
         soDT = "";
     }
-    NhaCungCap(String maNCC) {
+    public NhaCungCap(String maNCC) {
         this.maNCC = maNCC;
         tenNCC = "";
         diaChi = "";
         soDT = "";
     }
-    NhaCungCap(String maNCC, String tenNCC, String diaChi, String soDT) {
+    public NhaCungCap(String maNCC, String tenNCC, String diaChi, String soDT) {
         this.maNCC = maNCC;
         this.tenNCC = tenNCC;
         this.diaChi = diaChi;
@@ -29,24 +28,30 @@ public class NhaCungCap {
     
     public void nhap() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Nhap ma Nha cung cap:");
-        maNCC = scanner.nextLine();
-        System.out.println("Nhap ten Nha cung cap:");
-        tenNCC = scanner.nextLine();
-        System.out.println("Nhap dia chi:");
-        diaChi = scanner.nextLine();
-        System.out.println("Nhap so dien thoai:");
-        soDT = scanner.nextLine();
+        do {
+            System.out.print("Nhap ma Nha cung cap:");
+            maNCC = scanner.next();
+            System.out.print("Nhap ten Nha cung cap:");
+            tenNCC = scanner.nextLine();
+            System.out.print("Nhap dia chi:");
+            diaChi = scanner.nextLine();
+            System.out.print("Nhap so dien thoai:");
+            soDT = scanner.next();
+            if(!isValid()) System.out.println("Cac truong khong duoc rong, nhap lai");
+        } while(!isValid());
     }
     public void nhap(String maNCC) {
         this.maNCC = maNCC;
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Nhap ten Nha cung cap: ");
-        tenNCC = scanner.nextLine();
-        System.out.print("Nhap dia chi: ");
-        diaChi = scanner.nextLine();
-        System.out.print("Nhap so dien thoai: ");
-        soDT = scanner.nextLine();
+        do {
+            System.out.print("Nhap ten Nha cung cap: ");
+            tenNCC=scanner.nextLine();
+            System.out.print("Nhap dia chi: ");
+            diaChi = scanner.nextLine();
+            System.out.print("Nhap so dien thoai: ");
+            soDT = scanner.nextLine();
+            if(!isValid()) System.out.println("Cac truong khong duoc rong, nhap lai");
+        } while(!isValid());
     }
     public void xuat() {
         System.out.println("Ma NCC: " + maNCC);
@@ -84,7 +89,7 @@ public class NhaCungCap {
     }
 
     public String toString() {
-        return String.format("%s, %s, %s, %s", 
+        return String.format("%s; %s; %s; %s", 
             maNCC, tenNCC, diaChi, soDT
         );
     }
@@ -95,11 +100,15 @@ public class NhaCungCap {
 
     public void khoiTaoTuString(String data) {
         Scanner scanner = new Scanner(data);
-        scanner.useDelimiter(",\s*|\n");
+        scanner.useDelimiter(";\s{0,}|\n");
         maNCC = scanner.next().trim();
         tenNCC = scanner.next().trim();
         diaChi = scanner.next().trim();
         soDT = scanner.next().trim();
         scanner.close();
+    }
+    public boolean isValid() {
+        return !maNCC.isEmpty() && !tenNCC.isEmpty() 
+        && !diaChi.isEmpty() && !soDT.isEmpty();
     }
 }

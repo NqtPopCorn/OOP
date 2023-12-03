@@ -1,5 +1,8 @@
-package OOP;
+package sanpham;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Scanner;
 
 public class DienThoai {
@@ -9,17 +12,17 @@ public class DienThoai {
     private float DonGia;
     private String DonViTinh;
 
-    DienThoai(){
+    public DienThoai(){
 
     }
-    DienThoai(String MaSP,String TenSP,int SoLuong,float DonGia,String DonViTinh){
+    public DienThoai(String MaSP,String TenSP,int SoLuong,float DonGia,String DonViTinh){
         this.MaSP=MaSP;
         this.TenSP=TenSP;
         this.SoLuong=SoLuong;
         this.DonGia=DonGia;
         this.DonViTinh=DonViTinh;
     }
-    DienThoai(DienThoai x){
+    public DienThoai(DienThoai x){
         MaSP=x.MaSP;
         TenSP=x.TenSP;
         SoLuong=x.SoLuong;
@@ -42,8 +45,8 @@ public class DienThoai {
         return DonViTinh;
     }
 
-    public void setDonGia(float donGia) {
-        DonGia = donGia;
+    public void setDonGia(Float result) {
+        DonGia = result;
     }
     public void setDonViTinh(String donViTinh) {
         DonViTinh = donViTinh;
@@ -60,8 +63,12 @@ public class DienThoai {
 
     public void nhap(){
         Scanner scanner=new Scanner(System.in);
-        System.out.println("Nhap MaSP:");
-        MaSP=scanner.nextLine();
+        DSDT dsdt=new DSDT();
+        dsdt.docfile();
+        do{
+            System.out.println("Nhap MaSP:");
+            MaSP=scanner.nextLine();
+        }while(dsdt.checkMaDT(MaSP)==true);
         System.out.println("Nhap Ten SP:");
         TenSP=scanner.nextLine();
         System.out.println("Nhap So luong:");
@@ -72,6 +79,13 @@ public class DienThoai {
         scanner.nextLine();
         System.out.println("Nhap Don vi tinh:");
         DonViTinh=scanner.nextLine();
+    }
+    public void nhap(DienThoai dt){
+        MaSP=dt.MaSP;
+        TenSP=dt.TenSP;
+        SoLuong=dt.SoLuong;
+        DonGia=dt.DonGia;
+        DonViTinh=dt.DonViTinh;
     }
     public void xuat(){
         System.out.println("Ma san pham la:"+MaSP);

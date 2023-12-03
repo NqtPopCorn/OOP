@@ -1,5 +1,4 @@
-package OOP;
-
+package sanpham;
 import java.util.Scanner;
 
 public class IOS extends DienThoai{
@@ -14,9 +13,15 @@ public class IOS extends DienThoai{
         this.TimIphone=TimIphone;
         this.HeSinhThaiDL=HeSinhThaiDL;
     }
+    IOS(IOS ios){
+        super(ios);
+        TimIphone=ios.TimIphone;
+        HeSinhThaiDL=ios.HeSinhThaiDL;
+    }
     public void setHeSinhThaiDL(String heSinhThaiDL) {
         HeSinhThaiDL = heSinhThaiDL;
     }
+
     public void setTimIphone(String timIphone) {
         TimIphone = timIphone;
     }
@@ -34,10 +39,14 @@ public class IOS extends DienThoai{
         System.out.println("He sinh thai doc lap la:");
         HeSinhThaiDL=scanner.nextLine();
     }
+    public void nhap(IOS dt){
+        super.nhap(dt);
+        HeSinhThaiDL=dt.HeSinhThaiDL;
+    }
     public void xuat(){
         super.xuat();
         System.out.println("Tim Iphone bang:"+TimIphone);
         System.out.println("He sinh thai doc lap san pham duoc tich hop la:"+HeSinhThaiDL);
     }
-
 }
+

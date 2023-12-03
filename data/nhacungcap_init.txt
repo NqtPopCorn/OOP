@@ -1,0 +1,27 @@
+NCC001; cong ty A; Dia chi 1; 123456789
+NCC002; Nha cung cap 2; Dia chi 2; 987654321
+NCC003; Nha cung cap 3; Dia chi 3; 840291237
+NCC004; Nha cung cap 4; Dia chi 4; 812380954
+NCC005; Nha cung cap 5; Dia chi 5; 348023434
+NCC006; Nha cung cap 6; Dia chi 6; 756756775
+NCC007; Nha cung cap 7; Dia chi 7; 664565477
+NCC008; Nha cung cap 8; Dia chi 8; 222222222
+NCC009; Nha cung cap 9; Dia chi 9; 856423667
+NCC010; Nha cung cap 10; Dia chi 10; 028374815
+NCC011; Nha cung cap 11; Dia chi 11; 080429383
+NCC012; Nha cung cap 12; Dia chi 12; 021343486
+NCC013; thai bao; Dia chi 13; 743567657
+NCC014; Nha cung cap 14; Dia chi 14; 453453509
+NCC015; Nha cung cap 15; Dia chi 15; 436534567
+NCC016; Nha cung cap 16; Dia chi 16; 423423465
+NCC017; Nha cung cap 17; Dia chi 17; 423477234
+NCC018; Nha cung cap 18; Dia chi 18; 342687654
+NCC019; Nha cung cap 19; Dia chi 19; 423465476
+NCC020; Nha cung cap 20; Dia chi 20; 123123123
+NCC021; cong ty XYZ; 27 an duong vuong; 021325435
+NCC022; apple; 32 asdaf sad; 832034432
+NCC024; huawei; 21 assadf dasgf sdf; 921034394
+NCC025; vsmart; 675 tran binh trong; 012834323
+NCC026; quanncom; 213 ash jibc; 672182341
+NCC027; intel; 98 ae uoinf sdfj; 432969323
+NCC023; Nha cung cap 23; dia chi 23; 203213434
