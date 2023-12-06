@@ -6,25 +6,28 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class ListPhieuNhap {
+public class ListPhieuNhap implements Validator{
     private PhieuNhap[] list;
     private int n;
     private File fileData;
-    final private static String maPN_pattern = "PN\\d{3,}";
+    private String maPN_pattern;
     
     public ListPhieuNhap() {
         list = new PhieuNhap[0];
         n = 0;
         fileData = null;
+        maPN_pattern = "PN\\d{3,}";
     }
     public ListPhieuNhap(int n) {
         list = new PhieuNhap[n];
         this.n = n;
         fileData = null;
+        maPN_pattern = "PN\\d{3,}";
     }
     public ListPhieuNhap(String fileData_path) {
         list = new PhieuNhap[0];
         n = 0;
+        maPN_pattern = "PN\\d{3,}";
         fileData = new File(fileData_path);
         khoiTaoTuFileData();
     }
@@ -47,11 +50,11 @@ public class ListPhieuNhap {
             do {
                 System.out.print("Nhap ma PN: ");
                 ma = scanner.nextLine();
-                if(!isValidMaPN(ma)) {
+                if(!isValid(ma)) {
                     System.out.println("Ma sai dinh dang hoac da ton tai!!");
                     continue;
                 }
-            } while(!isValidMaPN(ma));
+            } while(!isValid(ma));
             list[i].nhap(ma);
         }
     }
@@ -112,15 +115,15 @@ public class ListPhieuNhap {
         do {
             System.out.print("Nhap ma PN: ");
             ma = scanner.nextLine();
-            if(!isValidMaPN(ma)) System.out.println("Ma sai format hoac da duoc su dung!, nhap lai");
-        } while(!isValidMaPN(ma));
+            if(!isValid(ma)) System.out.println("Ma sai format hoac da duoc su dung!, nhap lai");
+        } while(!isValid(ma));
         PhieuNhap newPN = new PhieuNhap();
         newPN.nhap(ma);
         list = Arrays.copyOf(list, n + 1);
         list[n++] = newPN;
     }
     public void them(PhieuNhap a) {
-        if(isValidMaPN(a.getMaPN())) {
+        if(isValid(a.getMaPN())) {
             list = Arrays.copyOf(list, n + 1);
             list[n] = a;
             n++;
@@ -368,7 +371,7 @@ public class ListPhieuNhap {
                 if(line.isEmpty()) continue;
                 PhieuNhap newPN = new PhieuNhap();
                 newPN.khoiTaoTuString(line);
-                if(isValidMaPN(newPN.getMaPN())) {
+                if(isValid(newPN.getMaPN())) {
                     them(newPN);
                 }
             }
@@ -379,12 +382,16 @@ public class ListPhieuNhap {
         }
     }
     //-----------------KIEM TRA---------------
-    public boolean isValidMaPN(String ma) {
-        return isMatchedFormatMaPN(ma) && findByMaPN(ma) == null;
+    public boolean isValid(String ma) {
+        return isMatchedFormat(ma) && isUnique(ma);
     }
-    public static boolean isMatchedFormatMaPN(String ma) {
+    public boolean isMatchedFormat(String ma) {
         return ma.matches(maPN_pattern);
     }
+    public boolean isUnique(String ma) {
+        return findByMaPN(ma) == null;
+    }
+
     //--------------sort theo ma neu can----------------
     public void sortAscMaPN() {
         for(int i = 0; i < n-1; i++) {

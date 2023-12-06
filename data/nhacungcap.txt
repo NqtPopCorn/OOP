@@ -20,8 +20,8 @@ NCC019; Nha cung cap 19; Dia chi 19; 423465476
 NCC020; Nha cung cap 20; Dia chi 20; 123123123
 NCC021; cong ty XYZ; 27 an duong vuong; 021325435
 NCC022; apple; 32 asdaf sad; 832034432
+NCC023; Nha cung cap 23; dia chi 23; 203213434
 NCC024; huawei; 21 assadf dasgf sdf; 921034394
 NCC025; vsmart; 675 tran binh trong; 012834323
 NCC026; quanncom; 213 ash jibc; 672182341
 NCC027; intel; 98 ae uoinf sdfj; 432969323
-NCC023; Nha cung cap 23; dia chi 23; 203213434

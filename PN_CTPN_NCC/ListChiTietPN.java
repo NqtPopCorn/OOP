@@ -1,5 +1,4 @@
 package PN_CTPN_NCC;
-//chua kiem tra ma duy nhat
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;

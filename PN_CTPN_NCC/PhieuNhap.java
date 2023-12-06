@@ -160,7 +160,5 @@ public class PhieuNhap {
     public String toStringFormat(String formatter) {
         return String.format(formatter, maPN, ngay, maNV, maNCC, String.format("%.3f", tongTien));
     }
-
-    //----------------MENU-----------
     
 }

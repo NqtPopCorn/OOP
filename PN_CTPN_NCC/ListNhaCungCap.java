@@ -7,28 +7,38 @@ import java.util.Arrays;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
+
+interface Validator {
+    public boolean isUnique(String ma);
+    public boolean isMatchedFormat(String ma);
+    public boolean isValid(String ma);
+}
 //xoa mot nha cung cap xong thi ma da xoa con dung lai duoc khong?, giai phap la gan bien static cho NhaCungCap
 //cach doc data phan cach boi dau phay bang scanner? tl: dung scanner.useDelimiter(String pattern)
-public class ListNhaCungCap {
+public class ListNhaCungCap implements Validator {
     private NhaCungCap[] list;
     private int n;
     private File fileData;
-    final private static String maNCC_pattern = "NCC\\d{3,}";
+    private String pattern;
 
     public ListNhaCungCap() {
         list = new NhaCungCap[0];
         n = 0;
         fileData = null;
+        pattern = "NCC\\d{3,}";
     }
     public ListNhaCungCap(int n) {
         list = new NhaCungCap[n];
         this.n = n;
+        pattern = "NCC\\d{3,}";
         for(int i = 0; i < n; i++) list[i] = new NhaCungCap();
         fileData = null;
+        
     }
     public ListNhaCungCap(String fileData_path) {
         list = new NhaCungCap[0];
         n = 0;
+        pattern = "NCC\\d{3,}";
         fileData = new File(fileData_path);
         khoiTaoTuFileData();
     }
@@ -51,21 +61,15 @@ public class ListNhaCungCap {
             do {
                 System.out.print("Nhap ma NCC: ");
                 ma = scanner.nextLine();
-                if(!isValidMaNCC(ma)) {
+                if(!isValid(ma)) {
                     System.out.println("Ma sai dinh dang hoac da ton tai!!");
                     continue;
                 }
-            } while(!isValidMaNCC(ma));
+            } while(!isValid(ma));
             list[i].nhap(ma);
         }
     }
     public void xuat() {
-        for(int i = 0; i < n; i++) {
-            System.out.println("Nha cung cap thu " + i+1 +": ");
-            list[i].xuat();
-        }
-    }
-    public void printTable() {
         if(n == 0) {
             System.out.println("Danh sach nha cung cap rong\n");
             return;
@@ -118,7 +122,7 @@ public class ListNhaCungCap {
         return fileData;
     }
     public String getPatternMaNCC() {
-        return maNCC_pattern;
+        return pattern;
     }
 
     //----------------------THEM----------------------
@@ -129,18 +133,18 @@ public class ListNhaCungCap {
         do {
             System.out.print("Nhap ma NCC: ");
             ma = scanner.nextLine();
-            if(!isValidMaNCC(ma)) {
+            if(!isValid(ma)) {
                 System.out.println("Ma sai dinh dang hoac da ton tai!!");
                 continue;
             }
-        } while(!isValidMaNCC(ma));
+        } while(!isValid(ma));
         newNCC = new NhaCungCap();
         newNCC.nhap(ma);
         list = Arrays.copyOf(list, n + 1);
         list[n++] = newNCC;
     }
     public void them(NhaCungCap a) {
-        if(isValidMaNCC(a.getMaNCC())) {
+        if(isValid(a.getMaNCC())) {
             list = Arrays.copyOf(list, n + 1);
             list[n] = a;
             n++;
@@ -199,11 +203,11 @@ public class ListNhaCungCap {
                 do {
                     System.out.print("Nhap ma NCC moi: ");
                     ma = scanner.nextLine();
-                    if(!isValidMaNCC(ma)) {
+                    if(!isValid(ma)) {
                         System.out.println("Ma sai dinh dang hoac khong co thay doi!!");
                         continue;
                     }
-                } while(!isValidMaNCC(ma));
+                } while(!isValid(ma));
                 list[foundIndex].setMaNCC(ma);
                 break;
             }
@@ -370,7 +374,7 @@ public class ListNhaCungCap {
                 if(line.isEmpty()) continue;
                 NhaCungCap newNCC = new NhaCungCap();
                 newNCC.khoiTaoTuString(line);
-                if(isValidMaNCC(newNCC.getMaNCC())) {
+                if(isValid(newNCC.getMaNCC())) {
                     them(newNCC);
                 }
             }
@@ -381,11 +385,14 @@ public class ListNhaCungCap {
         }
     }
     //-----------------KIEM TRA---------------
-    public boolean isValidMaNCC(String ma) {
-        return isMatchedFormatMaNCC(ma) && findByMaNCC(ma) == null;
+    public boolean isValid(String ma) {
+        return isMatchedFormat(ma) && isUnique(ma);
     }
-    public static boolean isMatchedFormatMaNCC(String ma) {
-        return ma.matches(maNCC_pattern);
+    public boolean isMatchedFormat(String ma) {
+        return ma.matches(pattern);
+    }
+    public boolean isUnique(String ma) {
+        return findByMaNCC(ma) == null;
     }
     //--------------sort theo ma neu can----------------
     public void sortAscMaNCC() {
@@ -434,7 +441,7 @@ public class ListNhaCungCap {
                     break;
                 } 
                 case 2: { 
-                    printTable();
+                    xuat();
                     break;
                 } 
                 case 3: { 
@@ -524,21 +531,21 @@ public class ListNhaCungCap {
                 System.out.print("Nhap ten can loc: ");
                 String ten = scanner.nextLine();
                 System.out.println("\nDanh sach da loc: ");
-                locTheoTen(ten).printTable();
+                locTheoTen(ten).xuat();
                 break;
             }
             case 2: {
                 System.out.print("Nhap dia chi can loc: ");
                 String diaChi = scanner.nextLine();
                 System.out.println("Danh sach da loc: ");
-                locTheoDiaChi(diaChi).printTable();
+                locTheoDiaChi(diaChi).xuat();
                 break;
             }
             case 3: {
                 System.out.print("Nhap so dien thoai can loc: ");
                 String sdt = scanner.nextLine();
                 System.out.println("Danh sach da loc: ");
-                locTheoSDT(sdt).printTable();
+                locTheoSDT(sdt).xuat();
                 break;
             }
             default: {

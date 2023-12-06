@@ -22,7 +22,7 @@ public class test {
 
 
         // lPN.menu(lNCC, lCTPN);
-        // lNCC.menu();
-        lCTPN.menu(lPN, lDT);
+        lNCC.menu();
+        // lCTPN.menu(lPN, lDT);
     }
 }
